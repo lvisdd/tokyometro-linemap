@@ -21,6 +21,29 @@ var station_milt2odpt = { "市ヶ谷":"市ケ谷",
                           "麹町":"麴町",
                         };
 
+var station_url2wiki = { "http://ja.wikipedia.org/wiki/入谷駅":"http://ja.wikipedia.org/wiki/入谷駅_(東京都)",
+                          "http://ja.wikipedia.org/wiki/霞ケ関駅":"http://ja.wikipedia.org/wiki/霞ケ関駅_(東京都)",
+                          "http://ja.wikipedia.org/wiki/八丁堀駅":"http://ja.wikipedia.org/wiki/八丁堀駅_(東京都)",
+                          "http://ja.wikipedia.org/wiki/末広町駅":"http://ja.wikipedia.org/wiki/末広町駅_(東京都)",
+                          "http://ja.wikipedia.org/wiki/稲荷町駅":"http://ja.wikipedia.org/wiki/稲荷町駅_(東京都)",
+                          "http://ja.wikipedia.org/wiki/田原町駅":"http://ja.wikipedia.org/wiki/田原町駅_(東京都)",
+                          "http://ja.wikipedia.org/wiki/日本橋駅":"http://ja.wikipedia.org/wiki/日本橋駅_(東京都)",
+                          "http://ja.wikipedia.org/wiki/京橋駅":"http://ja.wikipedia.org/wiki/京橋駅_(東京都)",
+                          "http://ja.wikipedia.org/wiki/神田駅":"http://ja.wikipedia.org/wiki/神田駅_(東京都)",
+                          "http://ja.wikipedia.org/wiki/大手町駅":"http://ja.wikipedia.org/wiki/大手町駅_(東京都)",
+                          "http://ja.wikipedia.org/wiki/中野駅":"http://ja.wikipedia.org/wiki/中野駅_(東京都)",
+                          "http://ja.wikipedia.org/wiki/落合駅":"http://ja.wikipedia.org/wiki/落合駅_(東京都)",
+                          "http://ja.wikipedia.org/wiki/浦安駅":"http://ja.wikipedia.org/wiki/浦安駅_(千葉県)",
+                          "http://ja.wikipedia.org/wiki/平和台駅":"http://ja.wikipedia.org/wiki/平和台駅_(東京都)",
+                          "http://ja.wikipedia.org/wiki/新富町駅":"http://ja.wikipedia.org/wiki/新富町駅_(東京都)",
+                          "http://ja.wikipedia.org/wiki/麴町駅":"http://ja.wikipedia.org/w/index.php?title=麴町駅&redirect=yes",
+                          "http://ja.wikipedia.org/wiki/赤坂駅":"http://ja.wikipedia.org/wiki/赤坂駅_(東京都)",
+                          "http://ja.wikipedia.org/wiki/明治神宮前〈原宿〉駅":"http://ja.wikipedia.org/w/index.php?title=明治神宮前〈原宿〉駅&redirect=yes",
+                          "http://ja.wikipedia.org/wiki/押上〈スカイツリー前〉駅":"http://ja.wikipedia.org/wiki/押上駅",
+                          "http://ja.wikipedia.org/wiki/住吉駅":"http://ja.wikipedia.org/wiki/住吉駅_(東京都)",
+                        }
+
+
 var line_colors = { "日比谷線":"#B5B5AC",
                     "銀座線":"#FF9500",
                     "丸ノ内線":"#F62E36",
@@ -140,7 +163,7 @@ var station_icons = { "日比谷線-中目黒":"/icon/station_number_icon/H/stat
                       "南北線-白金台":"/icon/station_number_icon/N/station_icon_n-02.png",
                       "南北線-白金高輪":"/icon/station_number_icon/N/station_icon_n-03.png",
                       "南北線-麻布十番":"/icon/station_number_icon/N/station_icon_n-04.png",
-                      "南北線-麻布十番":"/icon/station_number_icon/N/station_icon_n-05.png",
+                      "南北線-六本木一丁目":"/icon/station_number_icon/N/station_icon_n-05.png",
                       "南北線-溜池山王":"/icon/station_number_icon/N/station_icon_n-06.png",
                       "南北線-永田町":"/icon/station_number_icon/N/station_icon_n-07.png",
                       "南北線-四ツ谷":"/icon/station_number_icon/N/station_icon_n-08.png",
@@ -231,3 +254,58 @@ var station_icons = { "日比谷線-中目黒":"/icon/station_number_icon/H/stat
                       "副都心線-渋谷":"/icon/station_number_icon/F/station_icon_f-16.png",
                       "-":"/icon/station_number_icon/TokyoMetro.png"
                  };
+
+function getlinecolor(name){
+  if(line_colors.hasOwnProperty(name)){
+    return line_colors[name];
+  } else{
+    return "#000";
+  }
+}
+
+function getlinename(name){
+  if(line_milt2odpt.hasOwnProperty(name)){
+    return line_milt2odpt[name];
+  } else{
+    return name;
+  }
+}
+
+function getstationname(name){
+  if(station_milt2odpt.hasOwnProperty(name)){
+    return station_milt2odpt[name];
+  } else{
+    return name;
+  }
+}
+
+function getlineurl(name){
+  url = "http://ja.wikipedia.org/wiki/" + "東京メトロ" + name;
+  return url;
+}
+
+function getstationurl(name){
+  url = "http://ja.wikipedia.org/wiki/" + name + "駅";
+  if(station_url2wiki.hasOwnProperty(url)){
+    return station_url2wiki[url];
+  } else{
+    return url;
+  }
+}
+
+function getlineicon(name){
+  if(line_icons.hasOwnProperty(name)){
+    return line_icons[name];
+  } else{
+    return "";
+  }
+}
+
+function getstationicon(line_name,station_name){
+  var name = line_name + "-" + station_name;
+  if(station_icons.hasOwnProperty(name)){
+    return station_icons[name];
+  } else{
+    return "";
+  }
+}

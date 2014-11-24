@@ -4,8 +4,8 @@ d3.json("/json/tokyo.json", function(json) {
 
 
 function d3main(json) {
-  var width = 800,
-      height = 800,
+  var width = 600,
+      height = 600,
       centered;
   var scale = 75000;
   var center = [139.7531, 35.6859];
@@ -55,6 +55,7 @@ function d3main(json) {
         .attr({
           "fill":"#000",
         })
+        .on("click", clicked)
         ;
   
       // 境界線
@@ -94,6 +95,7 @@ function d3main(json) {
           // console.log(getlinename(d.properties.name));
           return getlinename(d.properties.name);
         })
+        // .on("click", clicked)
         .on('mouseover', function() {
         // .on('hover', function() {
           var self = d3.select(this);
@@ -159,7 +161,7 @@ function d3main(json) {
                'alt': self.attr('station_name'),
             });
         })
-        .on("click", clicked);
+        // .on("click", clicked);
     });
   }
   

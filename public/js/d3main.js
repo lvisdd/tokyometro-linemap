@@ -55,7 +55,6 @@ function d3main(json) {
         .attr({
           "fill":"#000",
         })
-        .on("click", clicked)
         ;
   
       // 境界線
@@ -161,7 +160,7 @@ function d3main(json) {
                'alt': self.attr('station_name'),
             });
         })
-        // .on("click", clicked);
+        .on("click", clicked);
     });
   }
   

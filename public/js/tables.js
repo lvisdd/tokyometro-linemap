@@ -192,7 +192,7 @@ var station_icons = { "日比谷線-中目黒":"/icon/station_number_icon/H/stat
                       "有楽町線-江戸川橋":"/icon/station_number_icon/Y/station_icon_y-12.svg",
                       "有楽町線-飯田橋":"/icon/station_number_icon/Y/station_icon_y-13.svg",
                       "有楽町線-市ケ谷":"/icon/station_number_icon/Y/station_icon_y-14.svg",
-                      "有楽町線-麹町":"/icon/station_number_icon/Y/station_icon_y-15.svg",
+                      "有楽町線-麴町":"/icon/station_number_icon/Y/station_icon_y-15.svg",
                       "有楽町線-永田町":"/icon/station_number_icon/Y/station_icon_y-16.svg",
                       "有楽町線-桜田門":"/icon/station_number_icon/Y/station_icon_y-17.svg",
                       "有楽町線-有楽町":"/icon/station_number_icon/Y/station_icon_y-18.svg",

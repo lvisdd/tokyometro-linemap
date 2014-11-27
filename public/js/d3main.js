@@ -142,8 +142,6 @@ function d3main(json) {
         })
         .on('mouseover', function() {
           var self = d3.select(this);
-          d3.select('#line_name_header').text('路線名');
-          d3.select('#station_name_header').text('駅名');
           d3.select('#line_name')
             .text('')
             .append('a')
@@ -159,6 +157,16 @@ function d3main(json) {
                'src': getstationicon(self.attr('line_name'),self.attr('station_name')),
                'alt': self.attr('station_name'),
             });
+          g.transition()
+            .duration(2000)
+            // .style("opacity", 0.1)
+            .style("fill-opacity", 0.5)
+        })
+        .on('mouseout', function() {
+          // g.attr("class", "station")
+          g.transition()
+            .duration(2000)
+            .style("fill-opacity", 1)
         })
         .on("click", clicked);
     });

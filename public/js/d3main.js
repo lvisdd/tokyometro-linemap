@@ -10,6 +10,9 @@ function d3main(json) {
   var scale = 75000;
   var center = [139.7531, 35.6859];
   
+  var colors = d3.scale.category20b();
+  var ci=0;
+
   // var svg = d3.select("body").append("svg")
   var svg = d3.select("#map").append("svg")
             .attr("width", width)
@@ -46,17 +49,23 @@ function d3main(json) {
   
   function d3land(){
       // 東京都（23区）
-      var land = topojson.feature(json, json.objects.tokyo).features;
-      g.append("g").attr("class", "land")
+      var data = topojson.feature(json, json.objects.tokyo).features;
+      var land = g.append("g").attr("class", "land")
         .selectAll("path")
-        .data(land)
+        .data(data)
         .enter().append('path')
+        .attr("land_id", function(d, i) {
+          return i + 1;
+        })
         .attr("d", path)
+        .attr('land_name', function(d) {
+          return d.properties.name;
+        })
         .attr({
           "fill":"#000",
         })
         ;
-  
+
       // 境界線
       g.append("g").attr("class", "boundary")
         .append("path")
@@ -76,11 +85,14 @@ function d3main(json) {
   function d3line(){
     d3.json("/json/metro_line.json", function(json) {
       // 路線図
-      var line = topojson.feature(json, json.objects.metro_line).features;
-      g.append("g").attr("class", "line")
+      var data = topojson.feature(json, json.objects.metro_line).features;
+      var line = g.append("g").attr("class", "line")
         .selectAll("path")
-        .data(line)
+        .data(data)
         .enter().append('path')
+        .attr("line_id", function(d, i) {
+          return i + 1;
+        })
         .attr('d', path)
         .style("stroke", function(d) {
            return getlinecolor(getlinename(d.properties.name));
@@ -91,12 +103,9 @@ function d3main(json) {
           "stroke-linejoin":"round",
         })
         .attr('line_name', function(d) {
-          // console.log(getlinename(d.properties.name));
           return getlinename(d.properties.name);
         })
-        // .on("click", clicked)
         .on('mouseover', function() {
-        // .on('hover', function() {
           var self = d3.select(this);
           d3.select('#line_name')
             .text('')
@@ -117,11 +126,14 @@ function d3main(json) {
   function d3station(){
     d3.json("/json/metro_station.json", function(json) {
       // 駅
-      var station = topojson.feature(json, json.objects.metro_station).features;
-      g.append("g").attr("class", "station")
+      var data = topojson.feature(json, json.objects.metro_station).features;
+      var station = g.append("g").attr("class", "station")
         .selectAll("path")
-        .data(station)
+        .data(data)
         .enter().append('path')
+        .attr("station_id", function(d, i) {
+          return i + 1;
+        })
         .attr('d', path)
         .style("stroke", function(d) {
           return getlinecolor(getlinename(d.properties.name));
@@ -137,10 +149,9 @@ function d3main(json) {
           return getlinename(d.properties.name);
         })
         .attr('station_name', function(d) {
-          // console.log(getstationname(d.properties.station_name));
           return getstationname(d.properties.station_name);
         })
-        .on('mouseover', function() {
+        .on('mouseover', function(d) {
           var self = d3.select(this);
           d3.select('#line_name')
             .text('')
@@ -157,16 +168,7 @@ function d3main(json) {
                'src': getstationicon(self.attr('line_name'),self.attr('station_name')),
                'alt': self.attr('station_name'),
             });
-          g.transition()
-            .duration(2000)
-            // .style("opacity", 0.1)
-            .style("fill-opacity", 0.5)
-        })
-        .on('mouseout', function() {
-          // g.attr("class", "station")
-          g.transition()
-            .duration(2000)
-            .style("fill-opacity", 1)
+          particle(d);
         })
         .on("click", clicked);
     });
@@ -179,7 +181,6 @@ function d3main(json) {
   
   function clicked(d) {
     var x, y, k;
-  
     if (d && centered !== d) {
       var centroid = path.centroid(d);
       x = centroid[0];
@@ -201,5 +202,28 @@ function d3main(json) {
     //   .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")scale(" + k + ")translate(" + -x + "," + -y + ")")
     //   .style("stroke-width", 1.5 / k + "px");
       .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")scale(" + k + ")translate(" + -x + "," + -y + ")")
+  }
+
+  function particle(d) {
+    i = 0;
+    var m = path.centroid(d);
+    g.append("circle", "rect")
+      .attr("cx", m[0])
+      .attr("cy", m[1])
+      .attr("r", 1e-6)
+      .attr({
+        "fill":"none",
+        "stroke":getlinecolor(getlinename(d.properties.name)),
+        "stroke-opacity":"1",
+      })
+      .transition()
+        .duration(1000)
+        .delay(100)
+        .ease(Math.sqrt)
+        .attr("r", 15)
+        .style("stroke-opacity", 1e-6)
+        .remove();
+  
+    // d3.event.preventDefault();
   }
 }

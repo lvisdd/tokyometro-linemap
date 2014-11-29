@@ -8,20 +8,26 @@ function d3main(json) {
       height = 600,
       centered;
   var scale = 75000;
+  var scaleextent = 1;
   var center = [139.7531, 35.6859];
   
-  var colors = d3.scale.category20b();
-  var ci=0;
-
   // var svg = d3.select("body").append("svg")
   var svg = d3.select("#map").append("svg")
-            .attr("width", width)
-            .attr("height", height)
-            .attr("overflow", "hidden")
-            .attr("position", "relative")
-            .attr("vertical-align", "middle")
+            // .attr("width", width)
+            // .attr("height", height)
+            // .attr("overflow", "hidden")
+            // .attr("position", "relative")
+            // .attr("vertical-align", "middle")
+            .attr({
+              "width":width,
+              "height":height,
+              "overflow":"hidden",
+              "position":"relative",
+              "vertical-align":"middle",
+              "pointer-events":"all",
+            })
             ;
-  
+
   var g = svg.append("g");
   
   var projection = d3.geo.mercator()
@@ -64,6 +70,13 @@ function d3main(json) {
         .attr({
           "fill":"#000",
         })
+        .append('rect')
+        .attr('class', 'click-capture')
+        .style('visibility', 'hidden')
+        .attr('x', 0)
+        .attr('y', 0)
+        .attr('width', width)
+        .attr('height', height);
         ;
 
       // 境界線
@@ -143,7 +156,6 @@ function d3main(json) {
           "fill-opacity":"1",
           "opacity":"1",
           "stroke-width":"1.5px",
-          "pointer-events":"all",
         })
         .attr('line_name', function(d) {
           return getlinename(d.properties.name);
@@ -151,6 +163,7 @@ function d3main(json) {
         .attr('station_name', function(d) {
           return getstationname(d.properties.station_name);
         })
+        .on("click", clicked)
         .on('mouseover', function(d) {
           var self = d3.select(this);
           d3.select('#line_name')
@@ -168,9 +181,9 @@ function d3main(json) {
                'src': getstationicon(self.attr('line_name'),self.attr('station_name')),
                'alt': self.attr('station_name'),
             });
-          particle(d);
+          focused(d);
         })
-        .on("click", clicked);
+        ;
     });
   }
   
@@ -181,30 +194,17 @@ function d3main(json) {
   
   function clicked(d) {
     var x, y, k;
-    if (d && centered !== d) {
       var centroid = path.centroid(d);
       x = centroid[0];
       y = centroid[1];
-      k = 4;
-      centered = d;
-    } else {
-      x = width / 2;
-      y = height / 2;
-      k = 1;
-      centered = null;
-    }
-  
-    // g.selectAll("path")
-    //   .classed("active", centered && function(d) { return d === centered; });
-  
+      k = zoom.scale();
+
     g.transition()
       .duration(750)
-    //   .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")scale(" + k + ")translate(" + -x + "," + -y + ")")
-    //   .style("stroke-width", 1.5 / k + "px");
       .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")scale(" + k + ")translate(" + -x + "," + -y + ")")
   }
 
-  function particle(d) {
+  function focused(d) {
     i = 0;
     var m = path.centroid(d);
     g.append("circle", "rect")

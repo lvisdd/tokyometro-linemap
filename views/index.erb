@@ -7,7 +7,8 @@
 
     <!-- Bootstrap -->
     <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-
+    <script src="/vendor/code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -36,25 +37,36 @@
     <div class="container">
       <div class="page-header" id="banner">
         <div class="row">
-          <div class="col-lg-8 col-md-7 col-sm-6">
+          <div class="col-lg-12">
             <h2 id="container">
-              <img id="tokyometro_mark" src="/icon/station_number_icon/TokyoMetro.svg" alt="東京メトロ" align="left" class="img-responsive" width="35" height="35" border="" />
-              <span id="tokyometro_name"><a href="http://ja.wikipedia.org/w/index.php?title=東京メトロ&redirect=yes">東京メトロ</a></span>
-            </h1>
+              <img id="tokyometro_mark" src="/icon/station_number_icon/TokyoMetro.svg" alt="東京メトロ" align="left"   class="img-responsive" width="35" height="35" border="" />
+                <img id="mark" src="" alt="" align="left" class="img-responsive" width="35" height="35" border="" />
+              <span id="tokyometro_name"><a href="http://ja.wikipedia.org/w/index.php?title=東京メトロ&redirect=yes">  東京メトロ</a></span>
+                <span id="line_name">　</span>
+                <span id="station_name">　</span>
+            </h2>
           </div>
         </div>
       </div>
-
+    </div>
+  
+    <div class="container">
       <div class="bs-docs-section">
         <div class="row">
           <div class="col-lg-12">
             <div class="bs-component">
-              <h2 id ="information">
-                <img id="mark" src="" alt="" align="left" class="img-responsive" width="35" height="35" border="" />
-                <span id="line_name">　</span>
-                <span id="station_name">　</span>
-              </h2>
               <div id ="map"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="bs-docs-section">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="bs-component">
               <div id ="usage">
                 <h4>Usage</h4>
                 <ul>
@@ -63,10 +75,11 @@
                   <li>move    : mouse drag and drop.</li>
                   <li>focus   : mouse click on station.</li>
                 </ul>
-               </div>
+              </div>
             </div>
           </div>
         </div>
+ 
       </div>
     </div>
 

@@ -2,7 +2,6 @@ d3.json("/json/tokyo.json", function(json) {
   d3main(json);
 });
 
-
 function d3main(json) {
   var width = 600,
       height = 600,
@@ -11,13 +10,7 @@ function d3main(json) {
   var scaleextent = 1;
   var center = [139.7531, 35.6859];
   
-  // var svg = d3.select("body").append("svg")
   var svg = d3.select("#map").append("svg")
-            // .attr("width", width)
-            // .attr("height", height)
-            // .attr("overflow", "hidden")
-            // .attr("position", "relative")
-            // .attr("vertical-align", "middle")
             .attr({
               "width":width,
               "height":height,
@@ -40,7 +33,7 @@ function d3main(json) {
   var zoom = d3.behavior.zoom()
                .scaleExtent([1, 8])
                .on("zoom", zoomed);
-  
+ 
   createMapBase();
   
   svg
@@ -163,7 +156,6 @@ function d3main(json) {
         .attr('station_name', function(d) {
           return getstationname(d.properties.station_name);
         })
-        .on("click", clicked)
         .on('mouseover', function(d) {
           var self = d3.select(this);
           d3.select('#line_name')
@@ -183,6 +175,7 @@ function d3main(json) {
             });
           focused(d);
         })
+        .on("click", clicked)
         ;
     });
   }

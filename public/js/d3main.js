@@ -62,14 +62,8 @@ function d3main(json) {
         })
         .attr({
           "fill":"#000",
+          "opacity":"1",
         })
-        .append('rect')
-        .attr('class', 'click-capture')
-        .style('visibility', 'hidden')
-        .attr('x', 0)
-        .attr('y', 0)
-        .attr('width', width)
-        .attr('height', height);
         ;
 
       // 境界線
@@ -86,6 +80,42 @@ function d3main(json) {
           "vector-effect":"non-scaling-stroke"
         })
         ;
+
+      // 区名
+      var city_labels = new Array();
+      g.append("g").attr("class", "city-label")
+        .selectAll("text")
+        .data(data)
+        .enter().append("text")
+          // .attr("class", function(d) {
+          .attr("id", function(d) {
+            if(!(city_labels.indexOf(d.properties.name) > -1)) {
+              city_labels.push(d.properties.name);
+            }
+            return d.properties.name;
+          })
+          .attr("transform", function(d) {
+            return "translate(" + path.centroid(d) + ")";
+          })
+          .attr({
+            "dy":".35em",
+            "fill":"#fff",
+            "fill-opacity":"0.25",
+            "font-size":"8px",
+            "font-weight":"500",     
+            "text-anchor":"middle",
+            "display": "none",
+            // "display": "block",
+          })
+          .text(function(d) {
+            return d.properties.name;
+        });
+      
+      // ラベル重複排除
+      for (var i in city_labels) {
+        // console.log(g.select("city-label."+city_labels[i]));
+        d3.select("#"+city_labels[i]).style("display", "block");
+      }
   }
   
   function d3line(){
@@ -111,20 +141,20 @@ function d3main(json) {
         .attr('line_name', function(d) {
           return getlinename(d.properties.name);
         })
-        .on('mouseover', function() {
-          var self = d3.select(this);
-          d3.select('#line_name')
-            .text('')
-            .append('a')
-            .attr('href', getlineurl(self.attr('line_name')))
-            .text(self.attr('line_name'));
-          d3.select('#station_name').text(' ');
-          d3.select('#mark')
-            .attr({
-              'src': getlineicon(self.attr('line_name')),
-              'alt': self.attr('line_name'),
-            })
-        })
+        // .on('mouseover', function() {
+        //   var self = d3.select(this);
+        //   d3.select('#line_name')
+        //     .text('')
+        //     .append('a')
+        //     .attr('href', getlineurl(self.attr('line_name')))
+        //     .text(self.attr('line_name'));
+        //   d3.select('#station_name').text(' ');
+        //   d3.select('#mark')
+        //     .attr({
+        //       'src': getlineicon(self.attr('line_name')),
+        //       'alt': self.attr('line_name'),
+        //     })
+        // })
         ;
     });
   }
@@ -156,6 +186,7 @@ function d3main(json) {
         .attr('station_name', function(d) {
           return getstationname(d.properties.station_name);
         })
+        .on("click", clicked)
         .on('mouseover', function(d) {
           var self = d3.select(this);
           d3.select('#line_name')
@@ -175,7 +206,14 @@ function d3main(json) {
             });
           focused(d);
         })
-        .on("click", clicked)
+        .append('circle')
+          .attr('class', 'click-capture')
+          .style('visibility', 'hidden')
+          .attr({
+            "cx":"0",
+            "cy":"0",
+            "r":"5",
+          })
         ;
     });
   }
@@ -200,7 +238,7 @@ function d3main(json) {
   function focused(d) {
     i = 0;
     var m = path.centroid(d);
-    g.append("circle", "rect")
+    g.append("circle")
       .attr("cx", m[0])
       .attr("cy", m[1])
       .attr("r", 1e-6)

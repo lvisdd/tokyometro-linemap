@@ -21,6 +21,17 @@ var station_milt2odpt = { "市ヶ谷":"市ケ谷",
                           "麹町":"麴町",
                         };
 
+var station_Fukutoshin2Yurakucho = { "副都心線-和光市":"有楽町線-和光市",
+                                     "副都心線-地下鉄成増":"有楽町線-地下鉄成増",
+                                     "副都心線-地下鉄赤塚":"有楽町線-地下鉄赤塚",
+                                     "副都心線-平和台":"有楽町線-平和台",
+                                     "副都心線-氷川台":"有楽町線-氷川台",
+                                     "副都心線-小竹向原":"有楽町線-小竹向原",
+                                     "副都心線-千川":"有楽町線-千川",
+                                     "副都心線-要町":"有楽町線-要町",
+                                     "副都心線-池袋":"有楽町線-池袋",
+                                   };
+
 var station_url2wiki = { "http://ja.wikipedia.org/wiki/入谷駅":"http://ja.wikipedia.org/wiki/入谷駅_(東京都)",
                          "http://ja.wikipedia.org/wiki/霞ケ関駅":"http://ja.wikipedia.org/wiki/霞ケ関駅_(東京都)",
                          "http://ja.wikipedia.org/wiki/八丁堀駅":"http://ja.wikipedia.org/wiki/八丁堀駅_(東京都)",
@@ -42,6 +53,175 @@ var station_url2wiki = { "http://ja.wikipedia.org/wiki/入谷駅":"http://ja.wik
                          "http://ja.wikipedia.org/wiki/押上〈スカイツリー前〉駅":"http://ja.wikipedia.org/wiki/押上駅",
                          "http://ja.wikipedia.org/wiki/住吉駅":"http://ja.wikipedia.org/wiki/住吉駅_(東京都)",
                        }
+
+var line_dict = { "日比谷線":"Hibiya",
+                  "銀座線":"Ginza",
+                  "丸ノ内線":"Marunouchi",
+                  "丸ノ内線（分岐線）":"MarunouchiBranch",
+                  "東西線":"Tozai",
+                  "南北線":"Namboku",
+                  "有楽町線":"Yurakucho",
+                  "千代田線":"Chiyoda",
+                  "半蔵門線":"Hanzomon",
+                  "副都心線":"Fukutoshin",
+}
+
+var dict_line = { "Hibiya":"日比谷線",
+                  "Ginza":"銀座線",
+                  "Marunouchi":"丸ノ内線",
+                  "MarunouchiBranch":"丸ノ内線（分岐線）",
+                  "Tozai":"東西線",
+                  "Namboku":"南北線",
+                  "Yurakucho":"有楽町線",
+                  "Chiyoda":"千代田線",
+                  "Hanzomon":"半蔵門線",
+                  "Fukutoshin":"副都心線",
+}
+
+var station_dict = { "青山一丁目":"AoyamaItchome",
+                     "赤坂":"Akasaka",
+                     "赤坂見附":"AkasakaMitsuke",
+                     "赤羽岩淵":"AkabaneIwabuchi",
+                     "秋葉原":"Akihabara",
+                     "浅草":"Asakusa",
+                     "麻布十番":"AzabuJuban",
+                     "綾瀬":"Ayase",
+                     "淡路町":"Awajicho",
+                     "飯田橋":"Iidabashi",
+                     "池袋":"Ikebukuro",
+                     "市ケ谷":"Ichigaya",
+                     "稲荷町":"Inaricho",
+                     "入谷":"Iriya",
+                     "上野":"Ueno",
+                     "上野広小路":"UenoHirokoji",
+                     "浦安":"Urayasu",
+                     "江戸川橋":"Edogawabashi",
+                     "恵比寿":"Ebisu",
+                     "王子":"Oji",
+                     "王子神谷":"OjiKamiya",
+                     "大手町":"Otemachi",
+                     "荻窪":"Ogikubo",
+                     "押上〈スカイツリー前〉":"Oshiage",
+                     "落合":"Ochiai",
+                     "御茶ノ水":"Ochanomizu",
+                     "表参道":"OmoteSando",
+                     "外苑前":"Gaiemmae",
+                     "神楽坂":"Kagurazaka",
+                     "葛西":"Kasai",
+                     "霞ケ関":"Kasumigaseki",
+                     "要町":"Kanamecho",
+                     "神谷町":"Kamiyacho",
+                     "茅場町":"Kayabacho",
+                     "神田":"Kanda",
+                     "北綾瀬":"KitaAyase",
+                     "北参道":"KitaSando",
+                     "北千住":"KitaSenju",
+                     "木場":"Kiba",
+                     "行徳":"Gyotoku",
+                     "京橋":"Kyobashi",
+                     "清澄白河":"KiyosumiShirakawa",
+                     "銀座":"Ginza",
+                     "銀座一丁目":"GinzaItchome",
+                     "錦糸町":"Kinshicho",
+                     "九段下":"Kudanshita",
+                     "麴町":"Kojimachi",
+                     "後楽園":"Korakuen",
+                     "護国寺":"Gokokuji",
+                     "小竹向原":"KotakeMukaihara",
+                     "国会議事堂前":"KokkaiGijidomae",
+                     "小伝馬町":"Kodemmacho",
+                     "駒込":"Komagome",
+                     "桜田門":"Sakuradamon",
+                     "渋谷":"Shibuya",
+                     "志茂":"Shimo",
+                     "白金台":"Shirokanedai",
+                     "白金高輪":"ShirokaneTakanawa",
+                     "新大塚":"ShinOtsuka",
+                     "新御茶ノ水":"ShinOchanomizu",
+                     "新木場":"ShinKiba",
+                     "新高円寺":"ShinKoenji",
+                     "新宿":"Shinjuku",
+                     "新宿御苑前":"ShinjukuGyoemmae",
+                     "新宿三丁目":"ShinjukuSanchome",
+                     "新富町":"Shintomicho",
+                     "新中野":"ShinNakano",
+                     "新橋":"Shimbashi",
+                     "神保町":"Jimbocho",
+                     "水天宮前":"Suitengumae",
+                     "末広町":"Suehirocho",
+                     "住吉":"Sumiyoshi",
+                     "千川":"Senkawa",
+                     "千駄木":"Sendagi",
+                     "雑司が谷":"Zoshigaya",
+                     "高田馬場":"Takadanobaba",
+                     "竹橋":"Takebashi",
+                     "辰巳":"Tatsumi",
+                     "溜池山王":"TameikeSanno",
+                     "田原町":"Tawaramachi",
+                     "地下鉄赤塚":"ChikatetsuAkatsuka",
+                     "地下鉄成増":"ChikatetsuNarimasu",
+                     "築地":"Tsukiji",
+                     "月島":"Tsukishima",
+                     "東京":"Tokyo",
+                     "東大前":"Todaimae",
+                     "東陽町":"Toyocho",
+                     "豊洲":"Toyosu",
+                     "虎ノ門":"Toranomon",
+                     "仲御徒町":"NakaOkachimachi",
+                     "永田町":"Nagatacho",
+                     "中野":"Nakano",
+                     "中野坂上":"NakanoSakaue",
+                     "中野新橋":"NakanoShimbashi",
+                     "中野富士見町":"NakanoFujimicho",
+                     "中目黒":"NakaMeguro",
+                     "西葛西":"NishiKasai",
+                     "西ケ原":"Nishigahara",
+                     "西新宿":"NishiShinjuku",
+                     "西日暮里":"NishiNippori",
+                     "西船橋":"NishiFunabashi",
+                     "西早稲田":"NishiWaseda",
+                     "二重橋前":"Nijubashimae",
+                     "日本橋":"Nihombashi",
+                     "人形町":"Ningyocho",
+                     "根津":"Nezu",
+                     "乃木坂":"Nogizaka",
+                     "八丁堀":"Hatchobori",
+                     "原木中山":"BarakiNakayama",
+                     "半蔵門":"Hanzomon",
+                     "東池袋":"HigashiIkebukuro",
+                     "東銀座":"HigashiGinza",
+                     "東高円寺":"HigashiKoenji",
+                     "東新宿":"HigashiShinjuku",
+                     "氷川台":"Hikawadai",
+                     "日比谷":"Hibiya",
+                     "広尾":"HiroO",
+                     "平和台":"Heiwadai",
+                     "方南町":"Honancho",
+                     "本郷三丁目":"HongoSanchome",
+                     "本駒込":"HonKomagome",
+                     "町屋":"Machiya",
+                     "三越前":"Mitsukoshimae",
+                     "南阿佐ケ谷":"MinamiAsagaya",
+                     "南行徳":"MinamiGyotoku",
+                     "南砂町":"MinamiSunamachi",
+                     "南千住":"MinamiSenju",
+                     "三ノ輪":"Minowa",
+                     "茗荷谷":"Myogadani",
+                     "妙典":"Myoden",
+                     "明治神宮前〈原宿〉":"MeijiJingumae",
+                     "目黒":"Meguro",
+                     "門前仲町":"MonzenNakacho",
+                     "有楽町":"Yurakucho",
+                     "湯島":"Yushima",
+                     "四ツ谷":"Yotsuya",
+                     "四谷三丁目":"YotsuyaSanchome",
+                     "代々木上原":"YoyogiUehara",
+                     "代々木公園":"YoyogiKoen",
+                     "六本木":"Roppongi",
+                     "六本木一丁目":"RoppongiItchome",
+                     "和光市":"Wakoshi",
+                     "早稲田":"Waseda",
+                   }
 
 
 var line_colors = { "日比谷線":"#9caeb7",
@@ -278,6 +458,14 @@ function getstationname(name){
   }
 }
 
+function getstationsharename(name){
+  if(station_Fukutoshin2Yurakucho.hasOwnProperty(name)){
+    return station_Fukutoshin2Yurakucho[name];
+  } else{
+    return name;
+  }
+}
+
 function getlineurl(name){
   url = "http://ja.wikipedia.org/wiki/" + "東京メトロ" + name;
   return url;
@@ -304,6 +492,30 @@ function getstationicon(line_name,station_name){
   var name = line_name + "-" + station_name;
   if(station_icons.hasOwnProperty(name)){
     return station_icons[name];
+  } else{
+    return "";
+  }
+}
+
+function getlinedict(name){
+  if(line_dict.hasOwnProperty(name)){
+    return line_dict[name];
+  } else{
+    return "";
+  }
+}
+
+function getdictline(name){
+  if(dict_line.hasOwnProperty(name)){
+    return dict_line[name];
+  } else{
+    return "";
+  }
+}
+
+function getstationdict(name){
+  if(station_dict.hasOwnProperty(name)){
+    return station_dict[name];
   } else{
     return "";
   }

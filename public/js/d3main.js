@@ -44,6 +44,7 @@ function d3main(json) {
       d3land();
       d3line();
       d3station();
+      sidebar();
   }
   
   function d3land(){
@@ -53,7 +54,7 @@ function d3main(json) {
         .selectAll("path")
         .data(data)
         .enter().append('path')
-        .attr("land_id", function(d, i) {
+        .attr("land_idx", function(d, i) {
           return i + 1;
         })
         .attr("d", path)
@@ -87,7 +88,6 @@ function d3main(json) {
         .selectAll("text")
         .data(data)
         .enter().append("text")
-          // .attr("class", function(d) {
           .attr("id", function(d) {
             if(!(city_labels.indexOf(d.properties.name) > -1)) {
               city_labels.push(d.properties.name);
@@ -105,15 +105,14 @@ function d3main(json) {
             "font-weight":"500",     
             "text-anchor":"middle",
             "display": "none",
-            // "display": "block",
           })
           .text(function(d) {
             return d.properties.name;
-        });
+          })
+          ;
       
       // ラベル重複排除
       for (var i in city_labels) {
-        // console.log(g.select("city-label."+city_labels[i]));
         d3.select("#"+city_labels[i]).style("display", "block");
       }
   }
@@ -126,7 +125,10 @@ function d3main(json) {
         .selectAll("path")
         .data(data)
         .enter().append('path')
-        .attr("line_id", function(d, i) {
+        // .attr("id", function(d) {
+        //   return getlinedict(getlinename(d.properties.name));
+        // })
+        .attr("line_idx", function(d, i) {
           return i + 1;
         })
         .attr('d', path)
@@ -141,20 +143,6 @@ function d3main(json) {
         .attr('line_name', function(d) {
           return getlinename(d.properties.name);
         })
-        // .on('mouseover', function() {
-        //   var self = d3.select(this);
-        //   d3.select('#line_name')
-        //     .text('')
-        //     .append('a')
-        //     .attr('href', getlineurl(self.attr('line_name')))
-        //     .text(self.attr('line_name'));
-        //   d3.select('#station_name').text(' ');
-        //   d3.select('#mark')
-        //     .attr({
-        //       'src': getlineicon(self.attr('line_name')),
-        //       'alt': self.attr('line_name'),
-        //     })
-        // })
         ;
     });
   }
@@ -167,10 +155,17 @@ function d3main(json) {
         .selectAll("path")
         .data(data)
         .enter().append('path')
-        .attr("station_id", function(d, i) {
+        .attr("id", function(d) {
+          return getlinedict(getlinename(d.properties.name)) + "-" + getstationdict(getstationname(d.properties.station_name));
+        })
+        .attr("station_idx", function(d, i) {
           return i + 1;
         })
+        .attr("class", function(d) {
+          return getlinename(d.properties.name) + "-" + getstationname(d.properties.station_name);
+        })
         .attr('d', path)
+        .attr('centroid', function(d) {return path.centroid(d);})
         .style("stroke", function(d) {
           return getlinecolor(getlinename(d.properties.name));
         })
@@ -186,24 +181,16 @@ function d3main(json) {
         .attr('station_name', function(d) {
           return getstationname(d.properties.station_name);
         })
-        .on("click", clicked)
+        .on("click", function(station) {
+          if (station != null) {
+            target_clicked(station);
+            target_linked(station);
+            target_focused(station);
+          }
+        })
         .on('mouseover', function(d) {
-          var self = d3.select(this);
-          d3.select('#line_name')
-            .text('')
-            .append('a')
-            .attr('href', getlineurl(self.attr('line_name')))
-            .text(self.attr('line_name'));
-          d3.select('#station_name')
-            .text('')
-            .append('a')
-            .attr('href', getstationurl(self.attr('station_name')))
-            .text(self.attr('station_name')　+ "駅");
-          d3.select('#mark')
-            .attr({
-               'src': getstationicon(self.attr('line_name'),self.attr('station_name')),
-               'alt': self.attr('station_name'),
-            });
+          clicked(d);
+          linked(this);
           focused(d);
         })
         .append('circle')
@@ -222,25 +209,52 @@ function d3main(json) {
     g.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
     g.attr('d', path);
   }
-  
+
   function clicked(d) {
     var x, y, k;
-      var centroid = path.centroid(d);
-      x = centroid[0];
-      y = centroid[1];
-      k = zoom.scale();
+    var centroid = path.centroid(d);
+    x = centroid[0];
+    y = centroid[1];
+    k = zoom.scale();
 
     g.transition()
       .duration(750)
       .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")scale(" + k + ")translate(" + -x + "," + -y + ")")
   }
 
+  function linked(station) {
+    var self = d3.select(station);
+    d3.select('#tokyometro_name')
+      .select('a')
+      .style("color", getlinecolor(self.attr('line_name')))
+      .style("text-decoration", "underline")
+    d3.select('#line_name')
+      .text('')
+      .append('a')
+      .attr('href', getlineurl(self.attr('line_name')))
+      .style("color", getlinecolor(self.attr('line_name')))
+      .style("text-decoration", "underline")
+      .text(self.attr('line_name'));
+    d3.select('#station_name')
+      .text('')
+      .append('a')
+      .attr('href', getstationurl(self.attr('station_name')))
+      .style("color", getlinecolor(self.attr('line_name')))
+      .style("text-decoration", "underline")
+      .text(self.attr('station_name')　+ "駅");
+    d3.select('#mark')
+      .attr({
+         'src': getstationicon(self.attr('line_name'),self.attr('station_name')),
+         'alt': self.attr('station_name'),
+      });
+  }
+
   function focused(d) {
-    i = 0;
-    var m = path.centroid(d);
+    // i = 0;
+    var centroid = path.centroid(d);
     g.append("circle")
-      .attr("cx", m[0])
-      .attr("cy", m[1])
+      .attr("cx", centroid[0])
+      .attr("cy", centroid[1])
       .attr("r", 1e-6)
       .attr({
         "fill":"none",
@@ -252,9 +266,143 @@ function d3main(json) {
         .delay(100)
         .ease(Math.sqrt)
         .attr("r", 15)
+        .attr("stroke-width", "2")
         .style("stroke-opacity", 1e-6)
         .remove();
   
     // d3.event.preventDefault();
   }
+
+  function target_clicked(station) {
+    var x, y, k;
+    var line_name = station.attr("line_name");
+    var centroid = station.attr("centroid").split(',');
+    x = centroid[0];
+    y = centroid[1];
+    k = zoom.scale();
+  
+    g.transition()
+      .duration(750)
+      .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")scale(" + k + ")translate(" + -x + "," + -y + ")")
+  }
+
+  function target_linked(station) {
+    var self = station;
+    d3.select('#tokyometro_name')
+      .select('a')
+      .style("color", getlinecolor(self.attr('line_name')))
+      .style("text-decoration", "underline")
+    d3.select('#line_name')
+      .text('')
+      .append('a')
+      .attr('href', getlineurl(self.attr('line_name')))
+      .style("color", getlinecolor(self.attr('line_name')))
+      .style("text-decoration", "underline")
+      .text(self.attr('line_name'));
+    d3.select('#station_name')
+      .text('')
+      .append('a')
+      .attr('href', getstationurl(self.attr('station_name')))
+      .style("color", getlinecolor(self.attr('line_name')))
+      .style("text-decoration", "underline")
+      .text(self.attr('station_name')　+ "駅");
+    d3.select('#mark')
+      .attr({
+         'src': getstationicon(self.attr('line_name'),self.attr('station_name')),
+         'alt': self.attr('station_name'),
+      });
+  }
+
+  function target_focused(station) {
+    var line_name = station.attr("line_name");
+    var centroid = station.attr("centroid").split(',');
+    g.append("circle")
+      .attr("cx", centroid[0])
+      .attr("cy", centroid[1])
+      .attr("r", 1e-6)
+      .attr({
+        "fill":"none",
+        "stroke":getlinecolor(getlinename(line_name)),
+        "stroke-opacity":"1",
+      })
+      .transition()
+        .duration(1000)
+        .delay(100)
+        .ease(Math.sqrt)
+        .attr("r", 15)
+        .attr("stroke-width", "2")
+        .style("stroke-opacity", 1e-6)
+        .remove();
+  
+    // d3.event.preventDefault();
+  }
+
+  function sidebar() {
+    // sidebar
+    for (var key in line_icons) {
+      d3.select("#sidebar")
+        .append("li")
+          .attr("id", "sidebar" + getlinedict(getlinename(key)))
+        .append("label")
+          .attr("class", "tree-toggler nav-header")
+        .append("a")
+          .attr("href", "#")
+          .style("color", getlinecolor(key))
+          .style("text-decoration", "underline")
+          .text(key)
+        .append("img")
+          .attr({
+            'src': getlineicon(key),
+            'alt': key,
+            'align':"left",
+            'class':"img-responsive",
+            'width':"25",
+            'height':"25",
+          })
+        ;
+
+      d3.select("#" + "sidebar" + getlinedict(getlinename(key)))
+        .append("ul")
+        .attr("class", "nav nav-list tree")
+        ;
+    }
+
+    for (var key in station_icons) {
+      var station_label = key.split("-");
+      d3.select("#" + "sidebar" + getlinedict(getlinename(station_label[0])))
+        .select("ul")
+        .append("li")
+        .append("a")
+        .attr("href", "#")
+        .attr("onClick", function() {
+          var replaced_station_label = getstationsharename(key).split("-");
+          return 'selected("' + getlinedict(getlinename(replaced_station_label[0])) + '","' + getstationdict(getstationname(replaced_station_label[1])) + '"); return false;';
+        })
+        .style("color", getlinecolor(station_label[0]))
+        .style("text-decoration", "underline")
+        .text(station_label[1])
+        .append("img")
+          .attr({
+            'src': getstationicon(station_label[0], station_label[1]),
+            'alt': station_label[1],
+            'align':"left",
+            'class':"img-responsive",
+            'width':"21",
+            'height':"21",
+          })
+        ;
+    }
+
+    $(document).ready(function() {
+      $('ul.tree').hide();
+      $('label.tree-toggler').click(function() {
+        $(this).parent().children('ul.tree').toggle(300);
+      });
+    });
+  }
+}
+
+function selected(line_id, station_id) {
+  var station = d3.select('#' + line_id + "-" + station_id);
+  station.on("click")(station);
 }

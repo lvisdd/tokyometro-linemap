@@ -372,6 +372,8 @@ function d3main(json) {
       d3.select("#" + "sidebar" + getlinedict(getlinename(station_label[0])))
         .select("ul")
         .append("li")
+        .append("label")
+          .style("padding-left", "15px")
         .append("a")
         .attr("href", "#")
         .attr("onClick", function() {

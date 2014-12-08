@@ -21,6 +21,14 @@ function d3main(json) {
             })
             ;
 
+  var rect = svg.append("rect")
+            .attr("width", width)
+            .attr("height", height)
+            .attr({
+              "fill":"#1B2C73",
+              "fill-opacity":"1",
+            })
+
   var g = svg.append("g");
   
   var projection = d3.geo.mercator()
@@ -380,6 +388,10 @@ function d3main(json) {
           var replaced_station_label = getstationsharename(key).split("-");
           return 'selected("' + getlinedict(getlinename(replaced_station_label[0])) + '","' + getstationdict(getstationname(replaced_station_label[1])) + '"); return false;';
         })
+        .attr("onMouseover", function() {
+          var replaced_station_label = getstationsharename(key).split("-");
+          return 'selected("' + getlinedict(getlinename(replaced_station_label[0])) + '","' + getstationdict(getstationname(replaced_station_label[1])) + '"); return false;';
+        })
         .style("color", getlinecolor(station_label[0]))
         .style("text-decoration", "underline")
         .text(station_label[1])
@@ -398,7 +410,8 @@ function d3main(json) {
     $(document).ready(function() {
       $('ul.tree').hide();
       $('label.tree-toggler').click(function() {
-        $(this).parent().children('ul.tree').toggle(300);
+      // $('label.tree-toggler').mouseover(function() {
+        $(this).parent().children('ul.tree').toggle(750);
       });
     });
   }

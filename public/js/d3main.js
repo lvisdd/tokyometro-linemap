@@ -353,8 +353,8 @@ function d3main(json) {
           .attr("id", "sidebar" + getlinedict(getlinename(key)))
         .append("label")
           .attr("class", "tree-toggler nav-header")
-        .append("a")
-          .attr("href", "#")
+        // .append("a")
+        //   .attr("href", "#")
           .style("color", getlinecolor(key))
           .style("text-decoration", "underline")
           .text(key)
@@ -409,8 +409,8 @@ function d3main(json) {
 
     $(document).ready(function() {
       $('ul.tree').hide();
-      $('label.tree-toggler').click(function() {
-      // $('label.tree-toggler').mouseover(function() {
+      // $('label.tree-toggler').click(function() {
+      $('label.tree-toggler').mouseover(function() {
         $(this).parent().children('ul.tree').toggle(750);
       });
     });

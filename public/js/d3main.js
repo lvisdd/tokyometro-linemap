@@ -409,7 +409,9 @@ function d3main(json) {
 
     $(document).ready(function() {
       $('ul.tree').hide();
-      // $('label.tree-toggler').click(function() {
+      $('label.tree-toggler').click(function() {
+        $(this).parent().children('ul.tree').toggle(750);
+      });
       $('label.tree-toggler').mouseover(function() {
         $(this).parent().children('ul.tree').toggle(750);
       });

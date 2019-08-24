@@ -12,6 +12,5 @@ https://tokyometro-linemap.herokuapp.com/
 | 分類              | 技術要素                                                                   |
 | ----------------- | -------------------------------------------------------------------------- |
 | フロントエンド    | [D3.js](https://d3js.org/), [Twitter Bootstrap](https://getbootstrap.com/) |
-| バックエンド      | [Ruby](https://www.ruby-lang.org/ja/)                                      |
-| Webフレームワーク | [Sinatra](http://sinatrarb.com/)                                           |
+| バックエンド      | [Ruby](https://www.ruby-lang.org/ja/) , [Sinatra](http://sinatrarb.com/)   |
 | クラウド基盤      | [Heroku](https://jp.heroku.com/)                                           |
